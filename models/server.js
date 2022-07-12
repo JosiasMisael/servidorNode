@@ -1,49 +1,48 @@
 const express = require('express');
 const cors = require('cors');
-const { json } = require('express');
-const { dbConexion } = require('../database/config');
+const {
+    json
+} = require('express');
+const {
+    dbConexion
+} = require('../database/config');
 
-class Server{
+class Server {
 
-    constructor(){
+    constructor() {
         this.app = express();
         this.port = process.env.PORT;
         this.usuarioPath = '/api/usuarios';
-
         //Conectar a bases de datos
         this.conectarDB();
-        
         //Middleware
         this.middlewares();
-       
         //Rutas de mi aplicacion
         this.routes();
-
     }
-    async conectarDB(){
-    await dbConexion()
-
+    async conectarDB() {
+        await dbConexion()
     }
-    middlewares(){
-    //COSRS, Poder definir de las direcciones http que peuden hacer peticiones al servidor 
-    this.app.use(cors());
+    middlewares() {
+        //COSRS, Poder definir de las direcciones http que peuden hacer peticiones al servidor 
+        this.app.use(cors());
 
-    //Parseo y lectura de body
-    this.app.use(json());
+        //Parseo y lectura de body
+        this.app.use(json());
 
-    // Utilizar Directorio publico para mostrar vistas
-    this.app.use( express.static('public'));
+        // Utilizar Directorio publico para mostrar vistas
+        this.app.use(express.static('public'));
     }
 
-    routes(){
+    routes() {
         //Definir las rutas y el controlador
-       this.app.use( this.usuarioPath, require('../routes/user-routes'))
+        this.app.use(this.usuarioPath, require('../routes/user-routes'))
     }
-    listen(){
+    listen() {
         //Crear la comunicacion de expresss
-      this.app.listen( this.port, ()=>{
+        this.app.listen(this.port, () => {
             console.log(`App running at https://localhost:${this.port}`);
-          });
+        });
     }
 
 }
